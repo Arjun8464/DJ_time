@@ -2,6 +2,7 @@ leftWristx=0;
 leftWristy=0;
 rightWrists=0;
 rightWristy=0;
+scoreleftWrist=0;
 song = "";
 
 function preload(){
@@ -19,6 +20,18 @@ poseNet.on('pose', gotPoses)
 
 function draw(){
 image(video , 0 , 0 , 600 , 500)
+
+fill('#0000FF');
+stroke('#FF0000');
+if(scoreleftWrist > 0.2){
+circle(leftWristx, leftWristy, 20);
+inNumberleftwristy=Number(leftWristy);
+removeDecimals=floor(inNumberleftwristy);
+leftWrist_divideby1000=removeDecimals/1000;
+volume=leftWrist_divideby1000*2;
+document.getElementById("volume").innerHTML="volume="+volume;
+song.setVolume(volume);
+}
 }
 
 function play(){
@@ -32,6 +45,7 @@ function modelLoaded(){
 }
 
 function gotPoses(results){
+    scoreleftWrist=results[0].pose.keypoints[9].score;
     console.log(results);
     leftWristx=results[0].pose.leftWrist.x;
     leftWristy=results[0].pose.leftWrist.y;
